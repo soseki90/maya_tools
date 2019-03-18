@@ -146,7 +146,11 @@ def pasteUnlockedSkinJointsWeights(deformer_node=None, geometry=None):
                     pos_vtx_total = vertex_total.index(vtx_to_paste)
                     weights_total[pos_vtx_total] = weights_total[pos_vtx_total] + weights_to_paste[i]
         
+        #Calculate percentage procces
+        joint_percentage = 100 / len(unlocked_joints_in_skin)
+        
         #Apply paste weights by joint
+        percentage_done = 0
         for paste_joint in unlocked_joints_in_skin:
             weight_joint_info = deform_weights_dict[paste_joint]
             vertex_to_paste = [x[0] for x in weight_joint_info]
@@ -169,6 +173,8 @@ def pasteUnlockedSkinJointsWeights(deformer_node=None, geometry=None):
                                      transformValue=[(paste_joint, 0)])
                     
             cmds.setAttr('{}.liw'.format(paste_joint), 1)
+            percentage_done = percentage_done + joint_percentage
+            print 'Paste procces at {}%'.format(str(percentage_done))
         
         #Unlock the joints
         for unlocked_joint in unlocked_joints_in_skin:
